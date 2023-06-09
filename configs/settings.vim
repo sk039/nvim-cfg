@@ -1,24 +1,12 @@
 colorscheme gruvbox
 
 " 设置命令行(statusline下面那行)高度
-set cmdheight=1
-
-set tabstop=8
-set shiftwidth=8
-" 空格代替tab
-set noexpandtab
-set softtabstop=8
-"
-"高亮搜索
-"set hls
-set cindent
-"set autoindent
-"set smartindent
+"set cmdheight=1
 
 " 设置匹配模式，显示匹配的括号
 set showmatch
 " 整词换行
-set linebreak
+"set linebreak
 " 光标从行首和行末时可以跳到另一行去
 set whichwrap=b,s,<,>,[,]
 " 禁用自动折行
@@ -27,8 +15,6 @@ set whichwrap=b,s,<,>,[,]
 " 禁止生成临时文件
 set nobackup
 set noswapfile
-
-set mouse=
 
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1

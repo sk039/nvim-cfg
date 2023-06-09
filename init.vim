@@ -42,7 +42,6 @@ Plug 'arkav/lualine-lsp-progress'
 Plug 'morhetz/gruvbox'
 Plug 'xiyaowong/transparent.nvim'
 " productive tools
-Plug 'ntpeters/vim-better-whitespace'
 Plug 'mbbill/undotree'
 Plug 'justinmk/vim-sneak'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -116,12 +115,17 @@ Plug 'dhananjaylatkar/cscope_maps.nvim'
 Plug 'ibhagwan/fzf-lua'
 
 Plug 'nmac427/guess-indent.nvim'
-Plug 'tenxsoydev/tabs-vs-spaces.nvim'
+Plug 'tenxsoydev/tabs-vs-spaces.nvim', { 'for': ['c', 'cpp', 'rust', 'lua'] }
+Plug 'ntpeters/vim-better-whitespace', { 'for': ['c', 'cpp', 'rust', 'lua'] }
+
 Plug 'FotiadisM/tabset.nvim'
 
 Plug 'kevinhwang91/nvim-bqf'
 
 Plug 'liuchengxu/vim-which-key'
+
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvimdev/dashboard-nvim'
 call plug#end()
 
 exec 'source' stdpath('config') . '/' . 'configs/settings.vim'
@@ -152,4 +156,5 @@ exec 'luafile' stdpath('config') . '/' . 'configs/tabs-vs-spaces.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/nvim-bqf.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/tabset.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/nvim-ts-rainbow2.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/dashboard-nvim.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/cscope_maps.lua'

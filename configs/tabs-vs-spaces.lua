@@ -8,7 +8,9 @@ require("tabs-vs-spaces").setup {
   -- Priority of highight matches.
   priority = 20,
   ignore = {
-    filetypes = {},
+    filetypes = {
+      "dashboard",
+    },
     -- Works for normal buffers by default.
     buftypes = {
       "acwrite",
