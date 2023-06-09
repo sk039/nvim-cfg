@@ -41,16 +41,19 @@ Plug 'arkav/lualine-lsp-progress'
 " theme
 Plug 'morhetz/gruvbox'
 Plug 'xiyaowong/transparent.nvim'
+
 " productive tools
 Plug 'mbbill/undotree'
-Plug 'justinmk/vim-sneak'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'junegunn/fzf'
 Plug 'voldikss/vim-floaterm'
 Plug 'tpope/vim-surround'
 Plug 'Chiel92/vim-autoformat'
-Plug 'easymotion/vim-easymotion'
 Plug 'liuchengxu/vim-clap'
+
+" EasyMotion Like
+Plug 'phaazon/hop.nvim'
+
 " latex
 Plug 'lervag/vimtex', {'for': ['tex']}
 "Plug 'latex-lsp/texlab'
@@ -159,4 +162,5 @@ exec 'luafile' stdpath('config') . '/' . 'configs/nvim-bqf.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/tabset.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/nvim-ts-rainbow2.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/dashboard-nvim.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/hop.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/cscope_maps.lua'
