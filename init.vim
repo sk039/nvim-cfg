@@ -12,9 +12,9 @@ endif
 
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/vim-plug'
+
+Plug 'nvim-tree/nvim-web-devicons'
 " programming {
-" LSP
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " python
 Plug 'vim-python/python-syntax' " c/c++
 Plug 'jackguo380/vim-lsp-cxx-highlight'
@@ -24,25 +24,23 @@ Plug 'rust-lang/rust.vim'
 " javascript
 Plug 'pangloss/vim-javascript'
 " tag view
-"Plug 'majutsushi/tagbar'
 Plug 'liuchengxu/vista.vim'
 " text align
-Plug 'godlygeek/tabular'
-" snippets
-Plug 'SirVer/ultisnips'
-" snippets collections
-Plug 'honza/vim-snippets'
+Plug 'junegunn/vim-easy-align'
+
 Plug 'rhysd/vim-clang-format'
 Plug 'preservim/nerdcommenter'
 " }
 " file browser
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'nvim-tree/nvim-tree.lua'
+
+" statusline
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'arkav/lualine-lsp-progress'
+
 " theme
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'morhetz/gruvbox'
-Plug 'tribela/vim-transparent'
+Plug 'xiyaowong/transparent.nvim'
 " productive tools
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'mbbill/undotree'
@@ -62,40 +60,94 @@ Plug 'xuhdev/vim-latex-live-preview', {'for': ['tex']}
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
-Plug 'liuchengxu/vim-which-key'
 " markdown
 Plug 'preservim/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'ferrine/md-img-paste.vim', {'for': ['markdown']}
+Plug 'ekickx/clipboard-image.nvim'
+Plug 'ellisonleao/glow.nvim'
 " vim translator
 Plug 'voldikss/vim-translator'
 Plug 'SpaceVim/VimCalc3'
 
-Plug 'luochen1990/rainbow'
 Plug 'jeetsukumaran/vim-buffergator'
 Plug 'chentoast/marks.nvim'
 
 " ASCII drawing
 Plug 'jbyuki/venn.nvim'
 Plug 'riddlew/asciitree.nvim'
+
+Plug 'nvim-lua/plenary.nvim'
+
+" Programming
+Plug 'williamboman/mason.nvim', { 'do': ':MasonUpdate' }
+Plug 'williamboman/mason-lspconfig.nvim'
+
+Plug 'neovim/nvim-lspconfig'
+Plug 'simrat39/rust-tools.nvim'
+
+Plug 'folke/neodev.nvim'
+
+" Auto Completion
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'HiPhish/nvim-ts-rainbow2'
+
+" Debugging
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'theHamsta/nvim-dap-virtual-text'
+
+" luasnip
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
+
+" snippets collections
+Plug 'honza/vim-snippets'
+
+Plug 'jghauser/mkdir.nvim'
+
+Plug 'dhananjaylatkar/cscope_maps.nvim'
+Plug 'ibhagwan/fzf-lua'
+
+Plug 'nmac427/guess-indent.nvim'
+Plug 'tenxsoydev/tabs-vs-spaces.nvim'
+
+Plug 'kevinhwang91/nvim-bqf'
+
+Plug 'liuchengxu/vim-which-key'
 call plug#end()
 
-source ~/.config/nvim/configs/settings.vim
-source ~/.config/nvim/configs/cscope.vim
-source ~/.config/nvim/configs/nerdtree.vim
-source ~/.config/nvim/configs/nerdcommenter.vim
-source ~/.config/nvim/configs/ctrlp.vim
-source ~/.config/nvim/configs/marks.lua
-source ~/.config/nvim/configs/venn.lua
-source ~/.config/nvim/configs/vista.vim
-source ~/.config/nvim/configs/coc.vim
-source ~/.config/nvim/configs/airline.vim
-source ~/.config/nvim/configs/vimtex.vim
-source ~/.config/nvim/configs/crates.vim
-source ~/.config/nvim/configs/undotree.vim
-source ~/.config/nvim/configs/gitgutter.vim
-source ~/.config/nvim/configs/mdimgpsate.vim
-source ~/.config/nvim/configs/translator.vim
-source ~/.config/nvim/configs/floaterm.vim
-source ~/.config/nvim/configs/which-key.vim
+exec 'source' stdpath('config') . '/' . 'configs/settings.vim'
+exec 'source' stdpath('config') . '/' . 'configs/nerdcommenter.vim'
+exec 'source' stdpath('config') . '/' . 'configs/ctrlp.vim'
+exec 'source' stdpath('config') . '/' . 'configs/vista.vim'
+exec 'source' stdpath('config') . '/' . 'configs/vimtex.vim'
+exec 'source' stdpath('config') . '/' . 'configs/crates.vim'
+exec 'source' stdpath('config') . '/' . 'configs/undotree.vim'
+exec 'source' stdpath('config') . '/' . 'configs/gitgutter.vim'
+exec 'source' stdpath('config') . '/' . 'configs/mdimgpsate.vim'
+exec 'source' stdpath('config') . '/' . 'configs/translator.vim'
+exec 'source' stdpath('config') . '/' . 'configs/floaterm.vim'
+exec 'source' stdpath('config') . '/' . 'configs/which-key.vim'
 
+exec 'luafile' stdpath('config') . '/' . 'configs/transparent.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/lualine.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/nvim-tree.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/marks.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/nvim-treesitter.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/venn.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/nvim-dap.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/lspconfig.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/glow.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/guess-indent.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/clipboard-image.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/tabs-vs-spaces.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/nvim-bqf.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/nvim-ts-rainbow2.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/cscope_maps.lua'
