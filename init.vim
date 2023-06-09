@@ -115,8 +115,9 @@ Plug 'dhananjaylatkar/cscope_maps.nvim'
 Plug 'ibhagwan/fzf-lua'
 
 Plug 'nmac427/guess-indent.nvim'
-Plug 'tenxsoydev/tabs-vs-spaces.nvim', { 'for': ['c', 'cpp', 'rust', 'lua'] }
-Plug 'ntpeters/vim-better-whitespace', { 'for': ['c', 'cpp', 'rust', 'lua'] }
+Plug 'tenxsoydev/tabs-vs-spaces.nvim'
+Plug 'ntpeters/vim-better-whitespace'
+"Plug 'johnfrankmorgan/whitespace.nvim'
 
 Plug 'FotiadisM/tabset.nvim'
 
@@ -139,6 +140,7 @@ exec 'source' stdpath('config') . '/' . 'configs/gitgutter.vim'
 exec 'source' stdpath('config') . '/' . 'configs/mdimgpsate.vim'
 exec 'source' stdpath('config') . '/' . 'configs/translator.vim'
 exec 'source' stdpath('config') . '/' . 'configs/floaterm.vim'
+exec 'source' stdpath('config') . '/' . 'configs/vim-better-whitespace.vim'
 exec 'source' stdpath('config') . '/' . 'configs/which-key.vim'
 
 exec 'luafile' stdpath('config') . '/' . 'configs/transparent.lua'
