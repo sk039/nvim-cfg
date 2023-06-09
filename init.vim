@@ -117,6 +117,7 @@ Plug 'ibhagwan/fzf-lua'
 
 Plug 'nmac427/guess-indent.nvim'
 Plug 'tenxsoydev/tabs-vs-spaces.nvim'
+Plug 'FotiadisM/tabset.nvim'
 
 Plug 'kevinhwang91/nvim-bqf'
 
@@ -149,5 +150,6 @@ exec 'luafile' stdpath('config') . '/' . 'configs/guess-indent.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/clipboard-image.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/tabs-vs-spaces.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/nvim-bqf.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/tabset.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/nvim-ts-rainbow2.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/cscope_maps.lua'
