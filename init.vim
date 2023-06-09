@@ -38,6 +38,9 @@ Plug 'nvim-tree/nvim-tree.lua'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'arkav/lualine-lsp-progress'
 
+" bufferline
+Plug 'akinsho/bufferline.nvim'
+
 " theme
 Plug 'morhetz/gruvbox'
 Plug 'xiyaowong/transparent.nvim'
@@ -163,4 +166,5 @@ exec 'luafile' stdpath('config') . '/' . 'configs/tabset.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/nvim-ts-rainbow2.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/dashboard-nvim.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/hop.lua'
+exec 'luafile' stdpath('config') . '/' . 'configs/bufferline.lua'
 exec 'luafile' stdpath('config') . '/' . 'configs/cscope_maps.lua'
