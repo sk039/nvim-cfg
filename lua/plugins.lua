@@ -697,7 +697,14 @@ return require('packer').startup(function(use)
 	use 'junegunn/fzf'
 	use({
 		'liuchengxu/vim-clap',
-		run = function() vim.fn["clap#installer#force_download"]() end,
+		config = function ()
+			-- clap#job#daemon#start error workaround
+			-- https://github.com/liuchengxu/vim-clap/blob/master/plugin/clap.vim#L14
+			vim.g.clap_start_server_on_startup = 0
+		end,
+		run = function()
+			vim.fn["clap#installer#force_download"]()
+		end,
 	})
 
 	use 'machakann/vim-highlightedyank'
