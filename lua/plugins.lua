@@ -95,16 +95,17 @@ return require('packer').startup(function(use)
 	-- Programming
 	-- Rust
 	use 'mhinz/vim-crates'
-	use 'rust-lang/rust.vim'
-	use 'cespare/vim-toml'
+	use { 'rust-lang/rust.vim', ft = { "rust" } }
+	use { 'cespare/vim-toml', ft = { "toml" } }
 
 	-- Python
-	use 'vim-python/python-syntax'
+	use { 'vim-python/python-syntax', ft = { "python" } }
 
 	-- C/C++
-	use 'jackguo380/vim-lsp-cxx-highlight'
+	use { 'jackguo380/vim-lsp-cxx-highlight', ft = { "c", "cpp" } }
 	use {
 		'dhananjaylatkar/cscope_maps.nvim',
+		ft = { "c", "cpp", "asm" },
 		config = function ()
 			-- load cscope maps
 			-- pass empty table to setup({}) for default options
@@ -170,6 +171,10 @@ return require('packer').startup(function(use)
 
 			require("neodev").setup({
 				-- add any options here, or leave empty to use the default settings
+			})
+
+			lspconfig.texlab.setup({
+				capabilities = capabilities,
 			})
 
 			lspconfig.lua_ls.setup({
@@ -393,9 +398,20 @@ return require('packer').startup(function(use)
 	}
 
 	-- Snippets
-	use 'L3MON4D3/LuaSnip'
+	use {
+		'L3MON4D3/LuaSnip',
+		requires = {
+			'honza/vim-snippets',
+			'rafamadriz/friendly-snippets',
+		},
+		config = function()
+			-- https://github.com/L3MON4D3/LuaSnip/blob/master/README.md#add-snippets
+			require("luasnip.loaders.from_vscode").lazy_load()
+			require("luasnip.loaders.from_snipmate").lazy_load()
+			require("luasnip").filetype_extend("all", { "_" })
+		end
+	}
 	use 'saadparwaiz1/cmp_luasnip'
-	use 'honza/vim-snippets'
 
 	-- AutoCompletion
 	use {
@@ -503,7 +519,7 @@ return require('packer').startup(function(use)
 					-- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
 					-- the name of the parser)
 					-- list of language that will be disabled
-					disable = { "c", "rust" },
+					-- disable = { "c", "rust" },
 					-- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
 					disable = function(lang, buf)
 						local max_filesize = 100 * 1024 -- 100 KB
@@ -555,6 +571,7 @@ return require('packer').startup(function(use)
 	-- Markdown
 	use {
 		'preservim/vim-markdown',
+		ft = { "markdown" },
 		config = function ()
 			vim.g.vim_markdown_folding_disabled = 1
 		end
@@ -562,6 +579,7 @@ return require('packer').startup(function(use)
 	use 'mzlogin/vim-markdown-toc'
 	use({
 		"iamcco/markdown-preview.nvim",
+		ft = { "markdown" },
 		run = function() vim.fn["mkdp#util#install"]() end,
 	})
 	use {
@@ -570,7 +588,26 @@ return require('packer').startup(function(use)
 			require'clipboard-image'.setup {}
 		end
 	}
-	use { "ellisonleao/glow.nvim", config = function() require("glow").setup() end }
+	use { "ellisonleao/glow.nvim", ft = { "markdown" }, config = function() require("glow").setup() end }
+
+	-- Latex
+	use {
+		'lervag/vimtex',
+		ft = { 'tex' },
+		config = function ()
+			-- use treesitter to syntax highlighting
+			vim.g.vimtex_syntax_enabled = 0
+		end
+	}
+	use {
+		"iurimateus/luasnip-latex-snippets.nvim",
+		config = function()
+			require'luasnip-latex-snippets'.setup({ use_treesitter = true })
+		end,
+		-- treesitter is required for markdown
+		ft = { "tex", "markdown" },
+	}
+	use { 'xuhdev/vim-latex-live-preview', ft = { 'tex' } }
 
 	-- Formating
 	use {
@@ -654,6 +691,15 @@ return require('packer').startup(function(use)
 	use 'jghauser/mkdir.nvim'
 
 	-- Utils
+	use 'sbdchd/neoformat'
+	use 'mbbill/undotree'
+	use 'voldikss/vim-floaterm'
+	use 'junegunn/fzf'
+	use({
+		'liuchengxu/vim-clap',
+		run = function() vim.fn["clap#installer#force_download"]() end,
+	})
+
 	use 'machakann/vim-highlightedyank'
 	use {
 		'karb94/neoscroll.nvim',
