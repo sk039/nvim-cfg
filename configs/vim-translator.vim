@@ -20,4 +20,4 @@ nmap <silent> <Leader>tr <Plug>TranslateR
 vmap <silent> <Leader>tr <Plug>TranslateRV
 let g:translator_window_max_width=0.8
 let g:translator_window_max_height=0.8
-let g:translator_default_engines=['haici', 'youdao', 'google']
+let g:translator_default_engines=['google', 'haici', 'youdao']

@@ -26,7 +26,27 @@ return require('packer').startup(function(use)
 
 	-- Themes
 	use { 'morhetz/gruvbox', config = function() vim.cmd[[colorscheme gruvbox]] end }
-	use 'xiyaowong/transparent.nvim'
+	use {
+		'xiyaowong/transparent.nvim',
+		config = function ()
+			require("transparent").setup({
+				groups = { -- table: default groups
+				'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
+				'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
+				'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
+				'SignColumn', 'CursorLineNr', 'EndOfBuffer',
+				},
+				extra_groups = {
+					"NormalFloat", -- plugins which have float panel such as Lazy, Mason, LspInfo
+					"FloatBorder", -- plugins which have float panel such as Lazy, Mason, LspInfo
+					"NvimTreeNormal", -- NvimTree
+					"Pmenu", -- nvim-cmp popmenu
+					"Float", -- nvim-cmp popmenu
+				}, -- table: additional groups that should be cleared
+				exclude_groups = {}, -- table: groups you don't want to clear
+			})
+		end
+	}
 	-- Status line
 	use {
 		'nvim-lualine/lualine.nvim',
@@ -80,6 +100,13 @@ return require('packer').startup(function(use)
 		'akinsho/bufferline.nvim',
 		config = function ()
 			require("bufferline").setup{}
+			vim.g.transparent_groups = vim.list_extend(
+			vim.g.transparent_groups or {},
+			vim.tbl_map(function(v)
+					return v.hl_group
+				end,
+				vim.tbl_values(require('bufferline.config').highlights))
+			)
 		end
 	}
 
@@ -168,7 +195,8 @@ return require('packer').startup(function(use)
 		config = function ()
 			local lspconfig = require('lspconfig')
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
+			-- Add border for LspInfo
+			require('lspconfig.ui.windows').default_options.border = 'single'
 			require("neodev").setup({
 				-- add any options here, or leave empty to use the default settings
 			})
@@ -283,7 +311,12 @@ return require('packer').startup(function(use)
 					end, opts)
 				end,
 			})
-
+			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+				border = "single",
+			})
+			vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+				border = "single",
+			})
 		end
 	}
 	use {
@@ -449,6 +482,8 @@ return require('packer').startup(function(use)
 				window = {
 					-- completion = cmp.config.window.bordered(),
 					-- documentation = cmp.config.window.bordered(),
+					completion = {border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}},
+					documentation = {border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}},
 				},
 				mapping = cmp.mapping.preset.insert({
 					-- https://sbulav.github.io/vim/neovim-setting-up-luasnip/
@@ -551,6 +586,12 @@ return require('packer').startup(function(use)
 					-- disable = { "c", "rust" },
 					-- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
 					disable = function(lang, buf)
+						-- lsp hover floating window, sparse highlight workaround
+						-- !!! currently not working
+						if vim.api.nvim_buf_get_option(buf, "buftype") == "nofile" then
+							return true
+						end
+
 						local max_filesize = 100 * 1024 -- 100 KB
 						local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
 						if ok and stats and stats.size > max_filesize then
@@ -605,7 +646,10 @@ return require('packer').startup(function(use)
 			vim.g.vim_markdown_folding_disabled = 1
 		end
 	}
-	use 'mzlogin/vim-markdown-toc'
+	use {
+		'mzlogin/vim-markdown-toc',
+		ft = { "markdown" },
+	}
 	use({
 		"iamcco/markdown-preview.nvim",
 		ft = { "markdown" },
@@ -816,7 +860,11 @@ return require('packer').startup(function(use)
 				-- default 10.
 				sign_priority = { lower=10, upper=15, builtin=8, bookmark=20 },
 				-- disables mark tracking for specific filetypes. default {}
-				excluded_filetypes = {},
+				excluded_filetypes = {
+					-- exclude lsp floating window, filetype=="", buftype=="nofile"
+					-- otherwise show signcolumn and broken display
+					"",
+				},
 				-- marks.nvim allows you to configure up to 10 bookmark groups, each with its own
 				-- sign/virttext. Bookmarks can be used to group together positions and quickly move
 				-- across multiple buffers. default sign is '!@#$%^&*()' (from 0 to 9), and
