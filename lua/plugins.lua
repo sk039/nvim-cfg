@@ -43,7 +43,9 @@ return require('packer').startup(function(use)
 					"Pmenu", -- nvim-cmp popmenu
 					"Float", -- nvim-cmp popmenu
 				}, -- table: additional groups that should be cleared
-				exclude_groups = {}, -- table: groups you don't want to clear
+				exclude_groups = {
+					"NotifyBackground"
+				}, -- table: groups you don't want to clear
 			})
 		end
 	}
@@ -73,8 +75,31 @@ return require('packer').startup(function(use)
 				sections = {
 					lualine_a = {'mode'},
 					lualine_b = {'branch', 'diff', 'diagnostics'},
-					lualine_c = {'filename', 'lsp_progress'},
-					lualine_x = {'encoding', 'fileformat', 'filetype'},
+					-- https://www.reddit.com/r/neovim/comments/pk1gpi/treesitter_statusline_show_code_context/
+					-- https://github.com/nvim-lualine/lualine.nvim#lua-expressions-as-lualine-component
+					lualine_c = { 'filename', "require'nvim-treesitter'.statusline()" },
+					lualine_x = {
+						-- {
+						-- 	require("noice").api.status.message.get_hl,
+						-- 	cond = require("noice").api.status.message.has,
+						-- },
+						{
+							require("noice").api.status.command.get,
+							cond = require("noice").api.status.command.has,
+							color = { fg = "#ff9e64" },
+						},
+						{
+							require("noice").api.status.mode.get,
+							cond = require("noice").api.status.mode.has,
+							color = { fg = "#ff9e64" },
+						},
+						{
+							require("noice").api.status.search.get,
+							cond = require("noice").api.status.search.has,
+							color = { fg = "#ff9e64" },
+						},
+						'encoding', 'fileformat', 'filetype'
+					},
 					lualine_y = {'progress'},
 					lualine_z = {'location'}
 				},
@@ -93,7 +118,55 @@ return require('packer').startup(function(use)
 			}
 		end
 	}
-	use 'arkav/lualine-lsp-progress'
+	-- use 'arkav/lualine-lsp-progress'
+
+	-- noice
+	use {
+		"folke/noice.nvim",
+		requires = {
+			-- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+			"MunifTanjim/nui.nvim",
+			-- OPTIONAL:
+			--   `nvim-notify` is only needed, if you want to use the notification view.
+			--   If not available, we use `mini` as the fallback
+			"rcarriga/nvim-notify",
+		},
+		config = function ()
+			require("noice").setup({
+				background_colour = "#000000",
+				cmdline = {
+					view = "cmdline",
+				},
+				lsp = {
+					-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+					override = {
+						["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+						["vim.lsp.util.stylize_markdown"] = true,
+						["cmp.entry.get_documentation"] = true,
+					},
+				},
+				-- you can enable a preset for easier configuration
+				presets = {
+					bottom_search = true, -- use a classic bottom cmdline for search
+					command_palette = true, -- position the cmdline and popupmenu together
+					long_message_to_split = true, -- long messages will be sent to a split
+					inc_rename = false, -- enables an input dialog for inc-rename.nvim
+					lsp_doc_border = true, -- add a border to hover docs and signature help
+				},
+			})
+			vim.keymap.set({"n", "i", "s"}, "<c-f>", function()
+				if not require("noice.lsp").scroll(4) then
+					return "<c-f>"
+				end
+			end, { silent = true, expr = true })
+
+			vim.keymap.set({"n", "i", "s"}, "<c-b>", function()
+				if not require("noice.lsp").scroll(-4) then
+					return "<c-b>"
+				end
+			end, { silent = true, expr = true })
+		end
+	}
 
 	-- Buffer line
 	use {
@@ -111,7 +184,12 @@ return require('packer').startup(function(use)
 	}
 
 	-- Startup Page
-	use 'nvim-telescope/telescope.nvim'
+	use {
+		'nvim-telescope/telescope.nvim',
+		config = function()
+			require("telescope").load_extension("noice")
+		end
+	}
 	use {
 		'nvimdev/dashboard-nvim',
 		config = function ()
@@ -311,12 +389,12 @@ return require('packer').startup(function(use)
 					end, opts)
 				end,
 			})
-			vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-				border = "single",
-			})
-			vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-				border = "single",
-			})
+			-- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+			-- 	border = "single",
+			-- })
+			-- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+			-- 	border = "single",
+			-- })
 		end
 	}
 	use {
