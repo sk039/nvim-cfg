@@ -18,4 +18,5 @@ augroup END
 
 exec 'source' stdpath('config') . '/' . 'configs/vim-crates.vim'
 exec 'source' stdpath('config') . '/' . 'configs/vim-translator.vim'
+exec 'source' stdpath('config') . '/' . 'configs/vista.vim'
 

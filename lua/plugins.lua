@@ -77,7 +77,7 @@ return require('packer').startup(function(use)
 					lualine_b = {'branch', 'diff', 'diagnostics'},
 					-- https://www.reddit.com/r/neovim/comments/pk1gpi/treesitter_statusline_show_code_context/
 					-- https://github.com/nvim-lualine/lualine.nvim#lua-expressions-as-lualine-component
-					lualine_c = { 'filename', "require'nvim-treesitter'.statusline()" },
+					lualine_c = { 'filename', "vim.fn['NearestMethodOrFunction']()" },
 					lualine_x = {
 						-- {
 						-- 	require("noice").api.status.message.get_hl,
