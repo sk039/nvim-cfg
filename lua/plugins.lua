@@ -415,12 +415,21 @@ return require('packer').startup(function(use)
 					end, opts)
 				end,
 			})
+
 			-- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 			-- 	border = "single",
 			-- })
+
 			-- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
 			-- 	border = "single",
 			-- })
+
+			-- Disable diagnostic virtual_text
+			-- https://github.com/neovim/nvim-lspconfig/issues/662
+			-- Or :lua vim.diagnostic.disable()
+			-- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+			-- 		virtual_text = false,
+			-- 	})
 		end
 	}
 	use {
