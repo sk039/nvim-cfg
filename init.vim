@@ -3,6 +3,8 @@ lua require("plugins")
 " Enable neovim true colors support
 set termguicolors
 
+set clipboard+=unnamedplus
+
 augroup packer_auto_compile
   autocmd!
   autocmd BufWritePost */nvim/lua/plugins.lua source <afile> | PackerCompile
