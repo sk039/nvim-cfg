@@ -523,8 +523,8 @@ return require('packer').startup(function(use)
 						local ret = true
 						local bufname = vim.api.nvim_buf_get_name(bufnr)
 						local fsize = vim.fn.getfsize(bufname)
-						if fsize > 100 * 1024 then
-							-- skip file size greater than 100k
+						if fsize > 1024 * 1024 then
+							-- skip file size greater than 1024k
 							ret = false
 						elseif bufname:match('^fugitive://') then
 							-- skip fugitive buffer
