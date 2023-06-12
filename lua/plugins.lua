@@ -8,7 +8,8 @@ local install_cmd = string.format("10split |term git clone --depth=1 %s %s", pac
 
 -- Auto-install packer in case it hasn't been installed.
 if vim.fn.glob(packer_install_dir) == "" then
-	vim.api.nvim_echo({ { "Installing packer.nvim", "Type" } }, true, {}) vim.cmd(install_cmd)
+	vim.api.nvim_echo({ { "Installing packer.nvim", "Type" } }, true, {})
+	vim.cmd(install_cmd)
 end
 
 -- Load packer.nvim
@@ -17,7 +18,6 @@ vim.cmd("packadd packer.nvim")
 -- plugins
 -- https://github.com/wbthomason/packer.nvim/blob/master/README.md#quickstart
 return require('packer').startup(function(use)
-
 	-- Packer can manage itself
 	use 'wbthomason/packer.nvim'
 
@@ -25,16 +25,16 @@ return require('packer').startup(function(use)
 	use 'nvim-lua/plenary.nvim'
 
 	-- Themes
-	use { 'morhetz/gruvbox', config = function() vim.cmd[[colorscheme gruvbox]] end }
+	use { 'morhetz/gruvbox', config = function() vim.cmd [[colorscheme gruvbox]] end }
 	use {
 		'xiyaowong/transparent.nvim',
-		config = function ()
+		config = function()
 			require("transparent").setup({
 				groups = { -- table: default groups
-				'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
-				'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
-				'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
-				'SignColumn', 'CursorLineNr', 'EndOfBuffer',
+					'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
+					'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
+					'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
+					'SignColumn', 'CursorLineNr', 'EndOfBuffer',
 				},
 				extra_groups = {
 					"NormalFloat", -- plugins which have float panel such as Lazy, Mason, LspInfo
@@ -42,7 +42,7 @@ return require('packer').startup(function(use)
 					"NvimTreeNormal", -- NvimTree
 					"Pmenu", -- nvim-cmp popmenu
 					"Float", -- nvim-cmp popmenu
-				}, -- table: additional groups that should be cleared
+				},     -- table: additional groups that should be cleared
 				exclude_groups = {
 					"NotifyBackground"
 				}, -- table: groups you don't want to clear
@@ -57,8 +57,8 @@ return require('packer').startup(function(use)
 				options = {
 					icons_enabled = true,
 					theme = 'auto',
-					component_separators = { left = '', right = ''},
-					section_separators = { left = '', right = ''},
+					component_separators = { left = '', right = '' },
+					section_separators = { left = '', right = '' },
 					disabled_filetypes = {
 						statusline = {},
 						winbar = {},
@@ -73,7 +73,7 @@ return require('packer').startup(function(use)
 					}
 				},
 				sections = {
-					lualine_a = {'mode'},
+					lualine_a = { 'mode' },
 					lualine_b = {
 						'branch', 'diff',
 						{
@@ -91,14 +91,14 @@ return require('packer').startup(function(use)
 							diagnostics_color = {
 								-- Same values as the general color option can be used here.
 								error = 'DiagnosticError', -- Changes diagnostics' error color.
-								warn  = 'DiagnosticWarn',  -- Changes diagnostics' warn color.
-								info  = 'DiagnosticInfo',  -- Changes diagnostics' info color.
-								hint  = 'DiagnosticHint',  -- Changes diagnostics' hint color.
+								warn  = 'DiagnosticWarn', -- Changes diagnostics' warn color.
+								info  = 'DiagnosticInfo', -- Changes diagnostics' info color.
+								hint  = 'DiagnosticHint', -- Changes diagnostics' hint color.
 							},
-							symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'},
-							colored = false,           -- Displays diagnostics status in color if set to true.
+							symbols = { error = 'E', warn = 'W', info = 'I', hint = 'H' },
+							colored = false, -- Displays diagnostics status in color if set to true.
 							update_in_insert = false, -- Update diagnostics in insert mode.
-							always_visible = false,   -- Show diagnostics even if there are none.
+							always_visible = false, -- Show diagnostics even if there are none.
 						}
 					},
 					-- https://www.reddit.com/r/neovim/comments/pk1gpi/treesitter_statusline_show_code_context/
@@ -126,14 +126,14 @@ return require('packer').startup(function(use)
 						},
 						'encoding', 'fileformat', 'filetype'
 					},
-					lualine_y = {'progress'},
-					lualine_z = {'location'}
+					lualine_y = { 'progress' },
+					lualine_z = { 'location' }
 				},
 				inactive_sections = {
 					lualine_a = {},
 					lualine_b = {},
-					lualine_c = {'filename'},
-					lualine_x = {'location'},
+					lualine_c = { 'filename' },
+					lualine_x = { 'location' },
 					lualine_y = {},
 					lualine_z = {}
 				},
@@ -157,7 +157,7 @@ return require('packer').startup(function(use)
 			--   If not available, we use `mini` as the fallback
 			"rcarriga/nvim-notify",
 		},
-		config = function ()
+		config = function()
 			require("noice").setup({
 				background_colour = "#ebdbb2",
 				cmdline = {
@@ -180,13 +180,13 @@ return require('packer').startup(function(use)
 					lsp_doc_border = true, -- add a border to hover docs and signature help
 				},
 			})
-			vim.keymap.set({"n", "i", "s"}, "<c-f>", function()
+			vim.keymap.set({ "n", "i", "s" }, "<c-f>", function()
 				if not require("noice.lsp").scroll(4) then
 					return "<c-f>"
 				end
 			end, { silent = true, expr = true })
 
-			vim.keymap.set({"n", "i", "s"}, "<c-b>", function()
+			vim.keymap.set({ "n", "i", "s" }, "<c-b>", function()
 				if not require("noice.lsp").scroll(-4) then
 					return "<c-b>"
 				end
@@ -197,14 +197,14 @@ return require('packer').startup(function(use)
 	-- Buffer line
 	use {
 		'akinsho/bufferline.nvim',
-		config = function ()
-			require("bufferline").setup{}
+		config = function()
+			require("bufferline").setup {}
 			vim.g.transparent_groups = vim.list_extend(
-			vim.g.transparent_groups or {},
-			vim.tbl_map(function(v)
-					return v.hl_group
-				end,
-				vim.tbl_values(require('bufferline.config').highlights))
+				vim.g.transparent_groups or {},
+				vim.tbl_map(function(v)
+						return v.hl_group
+					end,
+					vim.tbl_values(require('bufferline.config').highlights))
 			)
 		end
 	}
@@ -218,7 +218,7 @@ return require('packer').startup(function(use)
 	}
 	use {
 		'nvimdev/dashboard-nvim',
-		config = function ()
+		config = function()
 			require('dashboard').setup {}
 		end
 	}
@@ -237,31 +237,31 @@ return require('packer').startup(function(use)
 	use {
 		'dhananjaylatkar/cscope_maps.nvim',
 		ft = { "c", "cpp", "asm" },
-		config = function ()
+		config = function()
 			-- load cscope maps
 			-- pass empty table to setup({}) for default options
 			require('cscope_maps').setup({
-				disable_maps = true, -- true disables my keymaps, only :Cscope will be loaded
+				disable_maps = true,  -- true disables my keymaps, only :Cscope will be loaded
 				cscope = {
 					db_file = "./cscope.out", -- location of cscope db file
-					exec = "cscope", -- "cscope" or "gtags-cscope"
+					exec = "cscope",  -- "cscope" or "gtags-cscope"
 					picker = "telescope", -- "telescope", "fzf-lua" or "quickfix"
 					db_build_cmd_args = { "-bqkv" }, -- args used for db build (:Cscope build)
 				},
 			})
 
 			vim.api.nvim_set_keymap(
-			"n",
-			"<space>g",
-			[[<cmd>lua require('cscope_maps').cscope_prompt('g', vim.fn.expand("<cword>"))<cr>]],
-			{ noremap = true, silent = true }
+				"n",
+				"<space>g",
+				[[<cmd>lua require('cscope_maps').cscope_prompt('g', vim.fn.expand("<cword>"))<cr>]],
+				{ noremap = true, silent = true }
 			)
 
 			vim.api.nvim_set_keymap(
-			"n",
-			"<space>s",
-			[[<cmd>lua require('cscope_maps').cscope_prompt('s', vim.fn.expand("<cword>"))<cr>]],
-			{ noremap = true, silent = true }
+				"n",
+				"<space>s",
+				[[<cmd>lua require('cscope_maps').cscope_prompt('s', vim.fn.expand("<cword>"))<cr>]],
+				{ noremap = true, silent = true }
 			)
 		end
 	}
@@ -296,7 +296,7 @@ return require('packer').startup(function(use)
 	use 'folke/neodev.nvim'
 	use {
 		'neovim/nvim-lspconfig',
-		config = function ()
+		config = function()
 			local lspconfig = require('lspconfig')
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
 			-- Add border for LspInfo
@@ -335,11 +335,11 @@ return require('packer').startup(function(use)
 				filetypes = { "c", "cpp", "objc", "objcpp", "S", "s" },
 				init_options = {
 					highlight = {
-						lsRanges = true;
-					};
+						lsRanges = true,
+					},
 					index = {
-						threads = 2;
-					};
+						threads = 2,
+					},
 					clang = {
 						excludeArgs = {
 							"-fno-var-tracking-assignments",
@@ -370,11 +370,11 @@ return require('packer').startup(function(use)
 							"--param=allow-store-data-races=0",
 							"-Wa,arch/x86/kernel/macros.s",
 							"-Wa,-"
-						} ;
+						},
 						extraArgs = {
 							"--gcc-toolchain=/usr"
-						};
-					};
+						},
+					},
 				}
 			}
 
@@ -411,7 +411,7 @@ return require('packer').startup(function(use)
 					vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
 					vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
 					vim.keymap.set('n', '<space>f', function()
-						vim.lsp.buf.format { async = true }
+						vim.lsp.buf.format { async = true, }
 					end, opts)
 				end,
 			})
@@ -425,7 +425,7 @@ return require('packer').startup(function(use)
 	}
 	use {
 		'simrat39/rust-tools.nvim',
-		config = function ()
+		config = function()
 			local rt = require("rust-tools")
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
 			rt.setup({
@@ -433,19 +433,19 @@ return require('packer').startup(function(use)
 					settings = {
 						['rust-analyzer'] = {
 							diagnostics = {
-								enable = false;
+								enable = false,
 							},
 							procMacro = {
-								enable = true;
+								enable = true,
 							},
 							inlayHints = {
 								chainingHints = {
-									enable = true;
+									enable = true,
 								}
 							},
 							completion = {
 								autoimport = {
-									enable = true;
+									enable = true,
 								}
 							},
 						}
@@ -479,7 +479,7 @@ return require('packer').startup(function(use)
 						port = "${port}",
 						executable = {
 							command = "/opt/workdir/extension/adapter/codelldb",
-							args = {"--port", "${port}"},
+							args = { "--port", "${port}" },
 						},
 						name = "rt_lldb",
 					},
@@ -490,7 +490,7 @@ return require('packer').startup(function(use)
 
 	use {
 		'kevinhwang91/nvim-bqf',
-		config = function ()
+		config = function()
 			vim.cmd([[
 			hi BqfPreviewBorder guifg=#3e8e2d ctermfg=71
 			hi BqfPreviewTitle guifg=#3e8e2d ctermfg=71
@@ -507,7 +507,7 @@ return require('packer').startup(function(use)
 					win_height = 12,
 					win_vheight = 12,
 					delay_syntax = 80,
-					border = {'┏', '━', '┓', '┃', '┛', '━', '┗', '┃'},
+					border = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
 					show_title = false,
 					should_preview_cb = function(bufnr, qwinid)
 						local ret = true
@@ -535,8 +535,8 @@ return require('packer').startup(function(use)
 				},
 				filter = {
 					fzf = {
-						action_for = {['ctrl-s'] = 'split', ['ctrl-t'] = 'tab drop'},
-						extra_opts = {'--bind', 'ctrl-o:toggle-all', '--prompt', '> '}
+						action_for = { ['ctrl-s'] = 'split', ['ctrl-t'] = 'tab drop' },
+						extra_opts = { '--bind', 'ctrl-o:toggle-all', '--prompt', '> ' }
 					}
 				}
 			})
@@ -570,9 +570,9 @@ return require('packer').startup(function(use)
 			'hrsh7th/cmp-cmdline',
 			'petertriho/cmp-git',
 		},
-		config = function ()
-			local cmp = require'cmp'
-			local luasnip = require'luasnip'
+		config = function()
+			local cmp = require 'cmp'
+			local luasnip = require 'luasnip'
 			cmp.setup({
 				snippet = {
 					-- REQUIRED - you must specify a snippet engine
@@ -586,8 +586,8 @@ return require('packer').startup(function(use)
 				window = {
 					-- completion = cmp.config.window.bordered(),
 					-- documentation = cmp.config.window.bordered(),
-					completion = {border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}},
-					documentation = {border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'}},
+					completion = { border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' } },
+					documentation = { border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' } },
 				},
 				mapping = cmp.mapping.preset.insert({
 					-- https://sbulav.github.io/vim/neovim-setting-up-luasnip/
@@ -661,9 +661,9 @@ return require('packer').startup(function(use)
 	use 'nvim-treesitter/nvim-treesitter'
 	use {
 		'HiPhish/nvim-ts-rainbow2',
-		after = {'nvim-treesitter'},
+		after = { 'nvim-treesitter' },
 		config = function()
-			require'nvim-treesitter.configs'.setup {
+			require 'nvim-treesitter.configs'.setup {
 				-- A list of parser names, or "all" (the five listed parsers should always be installed)
 				ensure_installed = { "c", "rust", "lua", "vim", "vimdoc", "query" },
 
@@ -727,7 +727,7 @@ return require('packer').startup(function(use)
 
 	-- Debugging
 	use 'mfussenegger/nvim-dap'
-	use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+	use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
 	use 'theHamsta/nvim-dap-virtual-text'
 
 	-- Git
@@ -746,7 +746,7 @@ return require('packer').startup(function(use)
 	use {
 		'preservim/vim-markdown',
 		ft = { "markdown" },
-		config = function ()
+		config = function()
 			vim.g.vim_markdown_folding_disabled = 1
 		end
 	}
@@ -762,7 +762,7 @@ return require('packer').startup(function(use)
 	use {
 		'ekickx/clipboard-image.nvim',
 		config = function()
-			require'clipboard-image'.setup {}
+			require 'clipboard-image'.setup {}
 		end
 	}
 	use { "ellisonleao/glow.nvim", ft = { "markdown" }, config = function() require("glow").setup() end }
@@ -771,7 +771,7 @@ return require('packer').startup(function(use)
 	use {
 		'lervag/vimtex',
 		ft = { 'tex' },
-		config = function ()
+		config = function()
 			-- use treesitter to syntax highlighting
 			vim.g.vimtex_syntax_enabled = 0
 		end
@@ -779,7 +779,7 @@ return require('packer').startup(function(use)
 	use {
 		"iurimateus/luasnip-latex-snippets.nvim",
 		config = function()
-			require'luasnip-latex-snippets'.setup({ use_treesitter = true })
+			require 'luasnip-latex-snippets'.setup({ use_treesitter = true })
 		end,
 		-- treesitter is required for markdown
 		ft = { "tex", "markdown" },
@@ -789,13 +789,13 @@ return require('packer').startup(function(use)
 	-- Formating
 	use {
 		'nmac427/guess-indent.nvim',
-		config = function ()
+		config = function()
 			require('guess-indent').setup {}
 		end
 	}
 	use {
 		'tenxsoydev/tabs-vs-spaces.nvim',
-		config = function ()
+		config = function()
 			require("tabs-vs-spaces").setup {
 				-- Preferred indentation. Possible values: "auto"|"tabs"|"spaces".
 				-- "auto" detects the dominant indentation style in a buffer and highlights deviations.
@@ -824,22 +824,21 @@ return require('packer').startup(function(use)
 				-- Enable or disable user commands see Readme.md/#Commands for more info.
 				user_commands = true,
 			}
-
 		end
 	}
 	use {
 		'ntpeters/vim-better-whitespace',
-		config = function ()
+		config = function()
 			vim.g.better_whitespace_enabled = 1
 			vim.g.strip_whitespace_on_save = 1
-			vim.g.better_whitespace_filetypes_blacklist={'dashboard', 'diff',
-			'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown', 'fugitive'}
+			vim.g.better_whitespace_filetypes_blacklist = { 'dashboard', 'diff',
+				'git', 'gitcommit', 'unite', 'qf', 'help', 'markdown', 'fugitive' }
 		end
 	}
 	-- use 'johnfrankmorgan/whitespace.nvim'
 	use {
 		'FotiadisM/tabset.nvim',
-		config = function ()
+		config = function()
 			require("tabset").setup({
 				defaults = {
 					tabwidth = 4,
@@ -872,10 +871,10 @@ return require('packer').startup(function(use)
 	use 'mbbill/undotree'
 	use {
 		'numToStr/FTerm.nvim',
-		config = function ()
-			require'FTerm'.setup({
-				border = 'single',
-				dimensions  = {
+		config = function()
+			require 'FTerm'.setup({
+				border     = 'single',
+				dimensions = {
 					height = 0.9,
 					width = 0.9,
 				},
@@ -885,7 +884,7 @@ return require('packer').startup(function(use)
 			vim.api.nvim_create_user_command('FTermExit', require('FTerm').exit, { bang = true })
 			vim.api.nvim_create_user_command('FTermToggle', require('FTerm').toggle, { bang = true })
 			vim.keymap.set('n', '<A-t>', '<CMD>FTermToggle<CR>')
-			vim.cmd[[tnoremap <A-t> <CMD>FTermToggle<CR>]]
+			vim.cmd [[tnoremap <A-t> <CMD>FTermToggle<CR>]]
 			-- `Ctrl-\ Ctrl-N` to enter normal mode from the terminal.
 			-- vim.cmd[[tnoremap <Esc> <C-\><C-n>]]
 		end
@@ -893,7 +892,7 @@ return require('packer').startup(function(use)
 	use 'junegunn/fzf'
 	use({
 		'liuchengxu/vim-clap',
-		config = function ()
+		config = function()
 			-- clap#job#daemon#start error workaround
 			-- https://github.com/liuchengxu/vim-clap/blob/master/plugin/clap.vim#L14
 			vim.g.clap_start_server_on_startup = 0
@@ -932,16 +931,16 @@ return require('packer').startup(function(use)
 			hop.setup { keys = 'etovxqpdygfblzhckisuran' }
 			vim.keymap.set('', 'f', function()
 				hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
-			end, {remap=true})
+			end, { remap = true })
 			vim.keymap.set('', 'F', function()
 				hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
-			end, {remap=true})
+			end, { remap = true })
 			vim.keymap.set('', 't', function()
 				hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
-			end, {remap=true})
+			end, { remap = true })
 			vim.keymap.set('', 'T', function()
 				hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })
-			end, {remap=true})
+			end, { remap = true })
 		end
 	}
 	--[[   use {
@@ -958,7 +957,7 @@ return require('packer').startup(function(use)
 	use {
 		'chentoast/marks.nvim',
 		config = function()
-			require'marks'.setup {
+			require 'marks'.setup {
 				excluded_filetypes = {
 					-- exclude lsp floating window, filetype=="", buftype=="nofile"
 					-- otherwise show signcolumn and broken display
@@ -975,7 +974,7 @@ return require('packer').startup(function(use)
 	}
 	use {
 		'nvim-tree/nvim-tree.lua',
-		config = function ()
+		config = function()
 			-- disable netrw at the very start of your init.lua
 			vim.g.loaded_netrw = 1
 			vim.g.loaded_netrwPlugin = 1
@@ -991,7 +990,6 @@ return require('packer').startup(function(use)
 					dotfiles = true,
 				},
 			})
-
 		end
 	}
 
@@ -1003,22 +1001,23 @@ return require('packer').startup(function(use)
 				local venn_enabled = vim.inspect(vim.b.venn_enabled)
 				if venn_enabled == "nil" then
 					vim.b.venn_enabled = true
-					vim.cmd[[setlocal ve=all]]
+					vim.cmd [[setlocal ve=all]]
 					-- draw a line on HJKL keystokes
-					vim.api.nvim_buf_set_keymap(0, "n", "J", "<C-v>j:VBox<CR>", {noremap = true})
-					vim.api.nvim_buf_set_keymap(0, "n", "K", "<C-v>k:VBox<CR>", {noremap = true})
-					vim.api.nvim_buf_set_keymap(0, "n", "L", "<C-v>l:VBox<CR>", {noremap = true})
-					vim.api.nvim_buf_set_keymap(0, "n", "H", "<C-v>h:VBox<CR>", {noremap = true})
+					vim.api.nvim_buf_set_keymap(0, "n", "J", "<C-v>j:VBox<CR>", { noremap = true })
+					vim.api.nvim_buf_set_keymap(0, "n", "K", "<C-v>k:VBox<CR>", { noremap = true })
+					vim.api.nvim_buf_set_keymap(0, "n", "L", "<C-v>l:VBox<CR>", { noremap = true })
+					vim.api.nvim_buf_set_keymap(0, "n", "H", "<C-v>h:VBox<CR>", { noremap = true })
 					-- draw a box by pressing "f" with visual selection
-					vim.api.nvim_buf_set_keymap(0, "v", "f", ":VBox<CR>", {noremap = true})
+					vim.api.nvim_buf_set_keymap(0, "v", "f", ":VBox<CR>", { noremap = true })
 				else
-					vim.cmd[[setlocal ve=]]
-					vim.cmd[[mapclear <buffer>]]
+					vim.cmd [[setlocal ve=]]
+					vim.cmd [[mapclear <buffer>]]
 					vim.b.venn_enabled = nil
 				end
 			end
+
 			-- toggle keymappings for venn using <leader>v
-			vim.api.nvim_set_keymap('n', '<leader>v', ":lua Toggle_venn()<CR>", { noremap = true})
+			vim.api.nvim_set_keymap('n', '<leader>v', ":lua Toggle_venn()<CR>", { noremap = true })
 		end
 	}
 	use 'riddlew/asciitree.nvim'
@@ -1034,5 +1033,4 @@ return require('packer').startup(function(use)
 			}
 		end
 	}
-
 end)
