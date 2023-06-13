@@ -277,8 +277,9 @@ return require('packer').startup(function(use)
 						package_installed = "✓",
 						package_pending = "➜",
 						package_uninstalled = "✗"
-					}
-				}
+					},
+					border = "single",
+				},
 			})
 		end
 	}
