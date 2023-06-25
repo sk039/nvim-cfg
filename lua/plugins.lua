@@ -148,6 +148,14 @@ return require('packer').startup(function(use)
 
 	-- noice
 	use {
+		"rcarriga/nvim-notify",
+		config = function ()
+			require("notify").setup({
+				background_colour = "#000000",
+			})
+		end
+	}
+	use {
 		"folke/noice.nvim",
 		requires = {
 			-- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
@@ -214,6 +222,7 @@ return require('packer').startup(function(use)
 		'nvim-telescope/telescope.nvim',
 		config = function()
 			require("telescope").load_extension("noice")
+			vim.keymap.set('n', '<Leader>tg', ":Telescope live_grep<CR>")
 		end
 	}
 	use {
@@ -305,6 +314,8 @@ return require('packer').startup(function(use)
 			require("neodev").setup({
 				-- add any options here, or leave empty to use the default settings
 			})
+
+			vim.lsp.set_log_level("OFF")
 
 			lspconfig.texlab.setup({
 				capabilities = capabilities,
@@ -438,6 +449,9 @@ return require('packer').startup(function(use)
 		config = function()
 			local rt = require("rust-tools")
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
+			local mason = require('mason-registry')
+			local codelldb_path = mason.get_package("codelldb"):get_install_path()
+			local codelldb_bin = codelldb_path .. "/extension/adapter/codelldb"
 			rt.setup({
 				server = {
 					settings = {
@@ -488,7 +502,7 @@ return require('packer').startup(function(use)
 						type = "server",
 						port = "${port}",
 						executable = {
-							command = "/opt/workdir/extension/adapter/codelldb",
+							command = codelldb_bin,
 							args = { "--port", "${port}" },
 						},
 						name = "rt_lldb",
@@ -508,9 +522,15 @@ return require('packer').startup(function(use)
 				hi BqfPreviewTitle guifg=#3e8e2d ctermfg=71
 				hi BqfPreviewThumb guibg=#3e8e2d ctermbg=71
 				hi link BqfPreviewRange Search
+				"hi! link CursorLine Search
 				hi QuickFixLine cterm=bold ctermfg=none ctermbg=none
 			]])
-
+			--
+			-- vim.api.nvim_create_autocmd("FileType", {
+			-- 	pattern = "qf",
+			-- 	command = "set cursorline",
+			-- })
+			--
 			require('bqf').setup({
 				auto_enable = true,
 				auto_resize_height = true, -- highly recommended enable
@@ -737,9 +757,99 @@ return require('packer').startup(function(use)
 	use 'liuchengxu/vista.vim'
 
 	-- Debugging
-	use 'mfussenegger/nvim-dap'
-	use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
-	use 'theHamsta/nvim-dap-virtual-text'
+	use {
+		'sakhnik/nvim-gdb',
+		run = ":!./install.sh",
+		config = function ()
+			vim.g.nvimgdb_use_find_executables = 0
+			vim.g.nvimgdb_use_cmake_to_find_executables = 0
+		end
+	}
+	use {
+		'mfussenegger/nvim-dap',
+		config = function ()
+			local dap = require('dap')
+			local mason = require('mason-registry')
+			local codelldb_path = mason.get_package("codelldb"):get_install_path()
+			local codelldb_bin = codelldb_path .. "/extension/adapter/codelldb"
+			dap.adapters.codelldb = {
+				type = 'server',
+				port = "${port}",
+				executable = {
+					command = codelldb_bin,
+					args = {"--port", "${port}"},
+				},
+				name = "codelldb",
+			}
+			dap.configurations.c = {
+				{
+					name = "Launch vmlinux",
+					type = "codelldb",
+					request = "launch",
+					stopOnEntry = false,
+					program = "${workspaceFolder}/vmlinux",
+					--targetCreateCommands = {"target create ${workspaceFolder}/vmlinux"},
+					processCreateCommands = function ()
+						local addr = nil
+						vim.ui.input({
+							prompt = 'Enter remote addr: ',
+							default = 'localhost:1234'
+						},
+						function(input)
+							addr = input
+						end)
+						return { "gdb-remote " .. addr, }
+					end,
+					exitCommands = {"detach"},
+				},
+			}
+		end
+	}
+	use {
+		"rcarriga/nvim-dap-ui",
+		requires = { "mfussenegger/nvim-dap" },
+		config = function ()
+			require("dapui").setup()
+		end
+	}
+	use {
+		'theHamsta/nvim-dap-virtual-text',
+		config = function ()
+			require("nvim-dap-virtual-text").setup({
+				enabled = true,                        -- enable this plugin (the default)
+				enabled_commands = true,               -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
+				highlight_changed_variables = true,    -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
+				highlight_new_as_changed = false,      -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
+				show_stop_reason = true,               -- show stop reason when stopped for exceptions
+				commented = false,                     -- prefix virtual text with comment string
+				only_first_definition = true,          -- only show virtual text at first definition (if there are multiple)
+				all_references = false,                -- show virtual text on all all references of the variable (not only definitions)
+				clear_on_continue = false,             -- clear virtual text on "continue" (might cause flickering when stepping)
+				--- A callback that determines how a variable is displayed or whether it should be omitted
+				--- @param variable Variable https://microsoft.github.io/debug-adapter-protocol/specification#Types_Variable
+				--- @param buf number
+				--- @param stackframe dap.StackFrame https://microsoft.github.io/debug-adapter-protocol/specification#Types_StackFrame
+				--- @param node userdata tree-sitter node identified as variable definition of reference (see `:h tsnode`)
+				--- @param options nvim_dap_virtual_text_options Current options for nvim-dap-virtual-text
+				--- @return string|nil A text how the virtual text should be displayed or nil, if this variable shouldn't be displayed
+				display_callback = function(variable, buf, stackframe, node, options)
+					if options.virt_text_pos == 'inline' then
+						return ' = ' .. variable.value
+					else
+						return variable.name .. ' = ' .. variable.value
+					end
+				end,
+				-- position of virtual text, see `:h nvim_buf_set_extmark()`, default tries to inline the virtual text. Use 'eol' to set to end of line
+				virt_text_pos = vim.fn.has 'nvim-0.10' == 1 and 'inline' or 'eol',
+
+				-- experimental features:
+				all_frames = false,                    -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
+				virt_lines = false,                    -- show virtual lines instead of virtual text (will flicker!)
+				virt_text_win_col = nil                -- position the virtual text at a fixed window column (starting from the first text column) ,
+				-- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
+			})
+		end
+	}
 
 	-- Git
 	use {
@@ -798,12 +908,12 @@ return require('packer').startup(function(use)
 	use { 'xuhdev/vim-latex-live-preview', ft = { 'tex' } }
 
 	-- Formating
-	use {
-		'nmac427/guess-indent.nvim',
-		config = function()
-			require('guess-indent').setup {}
-		end
-	}
+	-- use {
+	-- 	'nmac427/guess-indent.nvim',
+	-- 	config = function()
+	-- 		require('guess-indent').setup {}
+	-- 	end
+	-- }
 	use {
 		'tenxsoydev/tabs-vs-spaces.nvim',
 		config = function()
@@ -856,7 +966,15 @@ return require('packer').startup(function(use)
 					expandtab = true
 				},
 				languages = {
+					make = {
+						tabwidth = 8,
+						expandtab = false,
+					},
 					go = {
+						tabwidth = 4,
+						expandtab = false
+					},
+					lua = {
 						tabwidth = 4,
 						expandtab = false
 					},
@@ -964,7 +1082,15 @@ return require('packer').startup(function(use)
 		end
 	} ]]
 	use 'anuvyklack/hydra.nvim'
-	use 'jeetsukumaran/vim-buffergator'
+	use {
+		'jeetsukumaran/vim-buffergator',
+		config = function ()
+			vim.g.buffergator_show_full_directory_path = 0
+			vim.g.buffergator_suppress_keymaps = 1
+			vim.keymap.set("n", "<Leader>b", ":BuffergatorOpen<CR>")
+			vim.keymap.set("n", "<Leader>B", ":BuffergatorClose<CR>")
+		end
+	}
 	use {
 		'chentoast/marks.nvim',
 		config = function()
